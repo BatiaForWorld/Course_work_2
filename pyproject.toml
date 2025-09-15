@@ -1,0 +1,40 @@
+[project]
+name = "course-work-2"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Andrei Kazantsev"}
+]
+license = {text = "MIT RF"}
+readme = "README.md"
+requires-python = "3.12.3"
+dependencies = [
+    "dotenv (>=0.9.9,<0.10.0)",
+    "pytest-cov (>=7.0.0,<8.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+addopts = "--cov=scr --cov-report=html"
+
+[dependency-groups]
+lint = [
+    "mypy (>=1.18.1,<2.0.0)",
+    "black (>=25.1.0,<26.0.0)",
+    "isort (>=6.0.1,<7.0.0)"
+]
+dev = [
+    "flake8 (>=7.3.0,<8.0.0)",
+    "pytest (>=8.4.2,<9.0.0)",
+    "pytest-cov (>=7.0.0,<8.0.0)"
+]
+
+[tool.black]
+line-length = 119
+
+[tool.isort]
+line_length = 119
