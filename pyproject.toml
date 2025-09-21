@@ -10,7 +10,8 @@ readme = "README.md"
 requires-python = "3.12.3"
 dependencies = [
     "dotenv (>=0.9.9,<0.10.0)",
-    "pytest-cov (>=7.0.0,<8.0.0)"
+    "pytest-cov (>=7.0.0,<8.0.0)",
+    "requests (>=2.32.5,<3.0.0)"
 ]
 
 
@@ -19,7 +20,7 @@ requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
-addopts = "--cov=scr --cov-report=html"
+addopts = "--cov=src --cov-report=html"
 
 [dependency-groups]
 lint = [
