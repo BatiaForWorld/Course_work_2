@@ -1,6 +1,8 @@
+import builtins
 import json
 import os
 import tempfile
+from contextlib import contextmanager
 from unittest.mock import Mock
 
 import pytest
@@ -70,9 +72,6 @@ def mock_hh_api():
 @pytest.fixture
 def mock_input():
     """Мок для input()"""
-    import io
-    import sys
-    from contextlib import contextmanager
 
     @contextmanager
     def mock_user_input(inputs):
@@ -87,21 +86,13 @@ def mock_input():
             except StopIteration:
                 raise KeyboardInterrupt("No more input values provided")
 
-        original_input = __builtins__["input"] if isinstance(__builtins__, dict) else __builtins__.input
-
-        if isinstance(__builtins__, dict):
-            __builtins__["input"] = mock_input_func
-        else:
-            __builtins__.input = mock_input_func
+        original_input = builtins.input
+        builtins.input = mock_input_func
 
         try:
             yield
         finally:
-
-            if isinstance(__builtins__, dict):
-                __builtins__["input"] = original_input
-            else:
-                __builtins__.input = original_input
+            builtins.input = original_input
 
     return mock_user_input
 

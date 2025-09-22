@@ -15,7 +15,8 @@ class TestJSONSaver:
                     with patch("json.dump") as mock_json_dump:
                         saver = JSONSaver()
 
-                        assert saver._JSONSaver__filename == "data/vacancies.json"
+                        filename = getattr(saver, "_JSONSaver__filename", None)
+                        assert filename == "data/vacancies.json"
                         mock_makedirs.assert_called_once_with("data", exist_ok=True)
                         mock_file.assert_called_once_with("data/vacancies.json", "w", encoding="utf-8")
                         mock_json_dump.assert_called_once_with(
@@ -26,10 +27,11 @@ class TestJSONSaver:
         """Тест инициализации с пользовательским файлом"""
         with patch("os.path.exists", return_value=False):
             with patch("builtins.open", mock_open()) as mock_file:
-                with patch("json.dump") as mock_json_dump:
+                with patch("json.dump"):
                     saver = JSONSaver("test_vacancies.json")
 
-                    assert saver._JSONSaver__filename == "test_vacancies.json"
+                    filename = getattr(saver, "_JSONSaver__filename", None)
+                    assert filename == "test_vacancies.json"
                     mock_file.assert_called_once_with("test_vacancies.json", "w", encoding="utf-8")
 
     def test_load_data_existing_file(self):
@@ -102,7 +104,6 @@ class TestJSONSaver:
                 with patch.object(saver, "_save_data") as mock_save:
                     saver.add_vacancy(vacancy_data)
 
-                    # Не должно вызываться, так как вакансия уже существует
                     mock_save.assert_not_called()
 
     def test_delete_vacancy(self):
@@ -140,9 +141,9 @@ class TestJSONSaver:
     def test_filter_vacancies_by_salary(self):
         """Тест фильтрации вакансий по диапазону зарплат"""
         existing_data = [
-            {"id": "1", "salary_from": 100000, "salary_to": 150000},  # avg: 125000
-            {"id": "2", "salary_from": 200000, "salary_to": 250000},  # avg: 225000
-            {"id": "3", "salary_from": 80000, "salary_to": 0},  # avg: 80000
+            {"id": "1", "salary_from": 100000, "salary_to": 150000},
+            {"id": "2", "salary_from": 200000, "salary_to": 250000},
+            {"id": "3", "salary_from": 80000, "salary_to": 0},
         ]
 
         with patch("os.path.exists", return_value=True):
